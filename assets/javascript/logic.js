@@ -119,6 +119,10 @@ $("#startButton").on("click", start);
 var timer = function () {
     if (timeTodisplay > 0) {
         timeTodisplay--;
+        if(timeTodisplay>=0 && timeTodisplay<=9)
+        {
+            timeTodisplay='0'+timeTodisplay;
+        }
         $("#timerDisplay").text("Time Left: 00 : " + timeTodisplay + " seconds");
     }
     else {
@@ -127,7 +131,7 @@ var timer = function () {
         $("#showThis").empty();
         NotAttempted++;
         $("#showThis").append($("<h4>").text("Time Up!"));
-        $("#showThis").append($("<p>").text("The Correct Answer was: " + questions[questionsCounter].answer));
+        $("#showThis").append($("<p>").text("The Correct Answer was: " + questions[questionsCounter-1].answer));
         //trigger the timer interval for the next question to show up
         showNextQuestion = setInterval(displayQuestion, 1000*2);
     }
