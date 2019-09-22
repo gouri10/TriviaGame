@@ -34,47 +34,52 @@ var questions = [
         option4: "No Doubt",
         answer: "Nirvava",
         gif: ""
-    },
+    },  
 ]
 
-//------pseudoCode here----------
+
 //create a questionsCounter variable equal to 0
 var questionsCounter = 0;
 var timeTodisplay = 0;
 var startTimer;
 var showNextQuestion;
+var showNextQuestionImmediately;
+var rightAnswers=0;
+var wrongAnswers=0;
+var NotAttempted=0;
 
-var displayQuestion = function () {    
+var displayQuestion = function () {
 
+    clearInterval(showNextQuestion);
     $("#showThis").empty();
 
-    var timerSection =$("<div>");
+    var timerSection = $("<div>");
     timerSection.attr("id", "timerDisplay");
     $("#showThis").append(timerSection);
 
-    var questionSection = $("<div>");
+    var questionSection = $("<h4>");
     questionSection.attr("id", "question");
     $("#showThis").append(questionSection);
 
-    var option1 = $("<div>");
+    var option1 = $("<h4>");
     option1.attr("id", "option1");
     option1.attr("class", "option");
     $("#showThis").append(option1);
 
-    var option2 = $("<div>");
+    var option2 = $("<h4>");
     option2.attr("id", "option2");
     option2.attr("class", "option");
     $("#showThis").append(option2);
 
-    var option3 = $("<div>");
+    var option3 = $("<h4>");
     option3.attr("id", "option3");
     option3.attr("class", "option");
     $("#showThis").append(option3);
 
-    var option4 = $("<div>");
+    var option4 = $("<h4>");
     option4.attr("id", "option4");
     option4.attr("class", "option");
-    $("#showThis").append(option4);    
+    $("#showThis").append(option4);
 
     if (questionsCounter < questions.length) {
         $("#question").text(questions[questionsCounter].question);
@@ -90,26 +95,27 @@ var displayQuestion = function () {
     }
     else {
         clearInterval(showNextQuestion);
-        $("#showThis").text("You are done with all questions");
+        $("#showThis").append($("<p>").text("You are done with all questions"));
+        $("#showThis").append($("<h4>").text("Total questions : " + questions.length));
+        $("#showThis").append($("<h4>").text("Right Answers : " + rightAnswers));
+        $("#showThis").append($("<h4>").text("Wrong Answers : " + wrongAnswers));
+        $("#showThis").append($("<h4>").text("Not Attempted : " + NotAttempted));
     }
 }
 
-//when user clicks on start button
-$("#startButton").on("click", function () {
-
+var start = function () {
     //hide the start button
     $("#showThis").empty();
-    questionsCounter = 0;
 
     //display first question
     displayQuestion();
+}
 
-    //trigger the timer interval for the next question to show up
-    showNextQuestion = setInterval(displayQuestion, 1000 * 50);
-
-});
+//when user clicks on start button
+$("#startButton").on("click", start);
 
 
+//timer to cretae 30 seconds question display
 var timer = function () {
     if (timeTodisplay > 0) {
         timeTodisplay--;
@@ -117,41 +123,61 @@ var timer = function () {
     }
     else {
         clearInterval(startTimer);
-        $("#timerDisplay").text("Time Up");
+        clearInterval(showNextQuestion);
+        $("#showThis").empty();
+        NotAttempted++;
+        $("#showThis").append($("<h4>").text("Time Up!"));
+        $("#showThis").append($("<p>").text("The Correct Answer was: " + questions[questionsCounter].answer));
+        //trigger the timer interval for the next question to show up
+        showNextQuestion = setInterval(displayQuestion, 1000*2);
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//create an interval for 60 seconds
-//var questionInterval=setInterval(nextQuestion,1000*60);
-
-//then set a timer to 30 seconds
-//var questionDisplayTimer=setTimeout(displayQuestion,1000*30);
-//clearTimeout(questionDisplayTimer);
 
 // create option click event
 // once the click event is triggered 
 // get the text of that option using this
 // compare the text with corresponding right answer
-// if they match show correct div
-// if they are not show wrong div
+// if they match update showThis with right answer
+// if they are not  update showThis with wrong answer
+//trigger the next question event in 2 seconds
+$(document).on("click", ".option", function () {    
+    var optionselected = this.innerText;
+    if (optionselected === questions[questionsCounter - 1].answer) {
+        rightAnswers++
+        $("#showThis").empty();
+        $("#showThis").append($("<p>").text("Time Left : 00 : " + timeTodisplay + " seconds"));
+        $("#showThis").append($("<h4>").text("CORRECT!"));
+        clearInterval(startTimer);
+        clearInterval(showNextQuestion);
+        //trigger the timer interval for the next question to show up
+        showNextQuestion = setInterval(displayQuestion, 1000);
+    }
+    else {
+        wrongAnswers++;
+        $("#showThis").empty();
+        $("#showThis").append($("<p>").text("Time Left : 00 : " + timeTodisplay + " seconds"));
+        $("#showThis").append($("<h4>").text("Nope!"));
+        $("#showThis").append($("<p>").text("The Correct Answer was: " + questions[questionsCounter-1].answer));
+        clearInterval(startTimer);
+        clearInterval(showNextQuestion);
+        //trigger the timer interval for the next question to show up
+        showNextQuestion = setInterval(displayQuestion, 1000*2);
+    }
+});
 
-//the moment user answered or the timer is back to 0
-//display result section
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
