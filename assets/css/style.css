@@ -23,3 +23,16 @@ button{
     padding:0.5em 4em;
     background-color: darksalmon;
 }
+
+
+
+.option:hover{
+    width: 40%;
+    background-color: darksalmon;
+    border: 1px solid blue;
+    margin: 0 auto;
+}
+
+img{
+    height:200px;
+}
