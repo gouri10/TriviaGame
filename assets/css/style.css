@@ -24,6 +24,11 @@ button{
     background-color: darksalmon;
 }
 
+#timerDisplay , #question{
+    margin-top:1em;
+
+}
+
 
 
 .option:hover{

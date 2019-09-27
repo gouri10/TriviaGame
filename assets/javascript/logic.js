@@ -132,7 +132,7 @@ var timer = function () {
         NotAttempted++;
         $("#showThis").append($("<h4>").text("Time Up!"));
         $("#showThis").append($("<p>").text("The Correct Answer was: " + questions[questionsCounter-1].answer));
-        var gif=$("<img src='./assets/images/wrong.gif'>");
+        var gif=$("<img src='./assets/images/timeup.gif'>");
         $("#showThis").append(gif);
         //trigger the timer interval for the next question to show up
         showNextQuestion = setInterval(displayQuestion, 1000*3);
@@ -153,7 +153,7 @@ $(document).on("click", ".option", function () {
         $("#showThis").empty();
         $("#showThis").append($("<p>").text("Time Left : 00 : " + timeTodisplay + " seconds"));
         $("#showThis").append($("<h4>").text("CORRECT!"));
-        var gif=$("<img src='./assets/images/yay.gif'>");
+        var gif=$("<img src='./assets/images/right.gif'>");
         $("#showThis").append(gif);
         clearInterval(startTimer);
         clearInterval(showNextQuestion);
